@@ -12,11 +12,13 @@
 -Create Signup user account
 -Implement sign in user API
 -Created Redux Store with userSlice
-
+-Implemented Sign out
+-Update Profile
+-Fetch from TMDB movies
 
 
 #FEATURES
--Login In. sign up Form
+-Login In/sign up Form
 -Browse(after authentication)
   -Header
   -Main Movie

@@ -3,18 +3,17 @@ import Header from "./Header";
 import { checkValidData } from '../utils/validate';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
-
+import { USER_AVATAR } from '../utils/constants';
 // react arrow function  component export -  rafce
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
   //creating references  using useRef()
   const name = useRef(null);
   const email = useRef(null);
@@ -38,10 +37,9 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up 
           const user = userCredential.user;
-          console.log(user);
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL: "https://avatars.githubusercontent.com/u/140902991?v=4"
+            photoURL: USER_AVATAR
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -49,7 +47,6 @@ const Login = () => {
                 addUser(
                   { uid: uid, email: email, displayName: displayName, photoURL: photoURL }
                 ));
-              navigate("/browse");
             })
             .catch((error) => {
               setErrorMessage(error.message);
@@ -72,8 +69,22 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://avatars.githubusercontent.com/u/140902991?v=4"
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser(
+                  { uid: uid, email: email, displayName: displayName, photoURL: photoURL }
+                ));
+            })
+            .catch((error) => {
+              setErrorMessage(error.message);
+            });
           // console.log(user);
-          navigate("/browse");
+          // navigate("/browse");
 
         })
         .catch((error) => {
